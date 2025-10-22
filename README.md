@@ -69,7 +69,7 @@ With all that out of the way...
   - `OBS_FRONTEND_EVENT_RECORDING_UNPAUSED`
 
   For each event, it calls `play_sound()` with the appropriate chime (if `enable_chimes` is true) and `speak("...")` with the corresponding phrase (if `enable_tts` is true).  
-  As a result, you get an audible and/or spoken notification whenever your recording status changes—all within OBS, with no external player or popup.
+  As a result, you get an audible and/or spoken notification whenever your recording status changes, all within OBS, with no external player or popup.
 
 # Troubleshooting & Tips
 - **No Sound?**  
