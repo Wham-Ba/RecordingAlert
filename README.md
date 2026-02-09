@@ -23,11 +23,12 @@ local resume_chime = "E:\\Users\\me\\Music\\resume.wav"
 ```
 
 - **IMPORTANT: Configurable Toggles**  
-  - I've added the option to toggle the chimes and Windows' inbuilt text to speech. At the top of the script you’ll find two booleans you can set to `true` or `false`. For example, if you only want the text to speech feature, you can turn the chimes off and turn the speech on. The speech is off by default:
+  - I've added the option to toggle the chimes and Windows' inbuilt text to speech. At the top of the script you’ll find two booleans you can set to `true` or `false`. For example, if you only want the text to speech feature, you can turn the chimes off and turn the speech on. The speech is off by default. I've also added the option to toggle a shutter sound for screenshots, which is on by default (please see the troubleshooting section below for more information; due to the way OBS works, this is only available for some types of screenshots):
 
 ```lua
 local enable_chimes = true   -- set to false to disable .wav chimes
 local enable_tts    = true   -- set to false to disable spoken announcements
+local enable_ss     = true    -- change this to false to disable the screenshot sound
 ```
   - You can also toggle the words by changing the text in quotes under "OBS event callback". For example, if you change "Recording started", Windows will say whatever you change it to when you start recording.
 ```lua
@@ -35,8 +36,6 @@ if event == obs.OBS_FRONTEND_EVENT_RECORDING_STARTED then
         if enable_chimes then play_sound(start_chime) end
         speak("Recording started")
 ```
-With all that out of the way...
-
 - Install the script from inside OBS:  
   - Open OBS  
   - Go to **Tools > Scripts**  
@@ -76,12 +75,17 @@ With all that out of the way...
   - Double-check the `.wav` file paths. Ensure the backslashes are escaped correctly (`\\`).  
   - Confirm your `.wav` files are valid by playing them in a media player.  
   - Check OBS’s Log (under **Help > Log Files > View Current Log**) for any Lua or path errors.
-
-- **Wrong File Format**  
+ 
+  - **Wrong File Format**  
   - If your `.wav` files are actually compressed or incorrectly encoded, PlaySoundA may not play them. Use standard 16-bit PCM WAV or try a different conversion method.
 
 - **Administrator Privileges**  
   - Not usually necessary. But if you run into permissions issues, try launching OBS as an Administrator.
+ 
+  - **No screenshot sounds or lagging screenshot sound**  
+  - This release adds a sound for Screenshot Output only, not Screenshot Selected Source. Unfortunately, OBS doesn't expose an API hook for Screenshot Selected Source, so the script can't tell what source you're focused on and trigger a matching sound. You might also notice a small delay between pressing the screenshot hotkey and hearing the sound, especially at higher resolutions. This is normal -- the screenshot isn't instant because OBS still has to render and write the image, unlike tools such as Nvidia Shadowplay that can grab frames directly from the GPU/frame buffer.
+ 
+  - **Anyway...**  
 
 - **Is FFI Missing or Disabled?**  
   - If OBS complains about `ffi` not being available, your OBS build may not support LuaJIT FFI by default. This is rare in official OBS releases for Windows but can happen in certain custom builds.
